@@ -1,0 +1,15 @@
+// 
+// Decompiled by Procyon v0.5.36
+// 
+
+package org.json4s.scalap;
+
+import scala.reflect.ScalaSignature;
+
+@ScalaSignature(bytes = "\u0006\u0001\r2q!\u0001\u0002\u0011\u0002\u0007\u0005\u0011B\u0001\u0003OC6,'BA\u0002\u0005\u0003\u0019\u00198-\u00197ba*\u0011QAB\u0001\u0007UN|g\u000eN:\u000b\u0003\u001d\t1a\u001c:h\u0007\u0001\u0019\"\u0001\u0001\u0006\u0011\u0005-qQ\"\u0001\u0007\u000b\u00035\tQa]2bY\u0006L!a\u0004\u0007\u0003\r\u0005s\u0017PU3g\u0011\u0015\t\u0002\u0001\"\u0001\u0013\u0003\u0019!\u0013N\\5uIQ\t1\u0003\u0005\u0002\f)%\u0011Q\u0003\u0004\u0002\u0005+:LG\u000fC\u0003\u0018\u0001\u0019\u0005\u0001$\u0001\u0003oC6,W#A\r\u0011\u0005iibBA\u0006\u001c\u0013\taB\"\u0001\u0004Qe\u0016$WMZ\u0005\u0003=}\u0011aa\u0015;sS:<'B\u0001\u000f\r\u0011\u0015\t\u0003\u0001\"\u0011#\u0003!!xn\u0015;sS:<G#A\r")
+public interface Name
+{
+    String name();
+    
+    String toString();
+}

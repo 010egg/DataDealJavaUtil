@@ -1,0 +1,321 @@
+// 
+// Decompiled by Procyon v0.5.36
+// 
+
+package org.postgresql.ds.jdbc23;
+
+import java.sql.PreparedStatement;
+import java.sql.CallableStatement;
+import org.postgresql.PGStatement;
+import java.sql.Statement;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import javax.sql.ConnectionEvent;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
+import org.postgresql.PGConnection;
+import org.postgresql.util.PSQLException;
+import org.postgresql.util.PSQLState;
+import org.postgresql.util.GT;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.sql.Connection;
+import javax.sql.ConnectionEventListener;
+import java.util.List;
+
+public abstract class AbstractJdbc23PooledConnection
+{
+    private final List<ConnectionEventListener> listeners;
+    private Connection con;
+    private ConnectionHandler last;
+    private final boolean autoCommit;
+    private final boolean isXA;
+    private static String[] fatalClasses;
+    
+    public AbstractJdbc23PooledConnection(final Connection con, final boolean autoCommit, final boolean isXA) {
+        this.listeners = new LinkedList<ConnectionEventListener>();
+        this.con = con;
+        this.autoCommit = autoCommit;
+        this.isXA = isXA;
+    }
+    
+    public void addConnectionEventListener(final ConnectionEventListener connectionEventListener) {
+        this.listeners.add(connectionEventListener);
+    }
+    
+    public void removeConnectionEventListener(final ConnectionEventListener connectionEventListener) {
+        this.listeners.remove(connectionEventListener);
+    }
+    
+    public void close() throws SQLException {
+        if (this.last != null) {
+            this.last.close();
+            if (!this.con.isClosed() && !this.con.getAutoCommit()) {
+                try {
+                    this.con.rollback();
+                }
+                catch (SQLException ex) {}
+            }
+        }
+        try {
+            this.con.close();
+        }
+        finally {
+            this.con = null;
+        }
+    }
+    
+    public Connection getConnection() throws SQLException {
+        if (this.con == null) {
+            final PSQLException sqlException = new PSQLException(GT.tr("This PooledConnection has already been closed."), PSQLState.CONNECTION_DOES_NOT_EXIST);
+            this.fireConnectionFatalError(sqlException);
+            throw sqlException;
+        }
+        try {
+            if (this.last != null) {
+                this.last.close();
+                if (!this.con.getAutoCommit()) {
+                    try {
+                        this.con.rollback();
+                    }
+                    catch (SQLException ex) {}
+                }
+                this.con.clearWarnings();
+            }
+            if (!this.isXA) {
+                this.con.setAutoCommit(this.autoCommit);
+            }
+        }
+        catch (SQLException sqlException2) {
+            this.fireConnectionFatalError(sqlException2);
+            throw (SQLException)sqlException2.fillInStackTrace();
+        }
+        final ConnectionHandler handler = new ConnectionHandler(this.con);
+        this.last = handler;
+        final Connection proxyCon = (Connection)Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { Connection.class, PGConnection.class }, handler);
+        this.last.setProxy(proxyCon);
+        return proxyCon;
+    }
+    
+    void fireConnectionClosed() {
+        ConnectionEvent evt = null;
+        final ConnectionEventListener[] arr$;
+        final ConnectionEventListener[] local = arr$ = this.listeners.toArray(new ConnectionEventListener[this.listeners.size()]);
+        for (final ConnectionEventListener listener : arr$) {
+            if (evt == null) {
+                evt = this.createConnectionEvent(null);
+            }
+            listener.connectionClosed(evt);
+        }
+    }
+    
+    void fireConnectionFatalError(final SQLException e) {
+        ConnectionEvent evt = null;
+        final ConnectionEventListener[] arr$;
+        final ConnectionEventListener[] local = arr$ = this.listeners.toArray(new ConnectionEventListener[this.listeners.size()]);
+        for (final ConnectionEventListener listener : arr$) {
+            if (evt == null) {
+                evt = this.createConnectionEvent(e);
+            }
+            listener.connectionErrorOccurred(evt);
+        }
+    }
+    
+    protected abstract ConnectionEvent createConnectionEvent(final SQLException p0);
+    
+    private static boolean isFatalState(final String state) {
+        if (state == null) {
+            return true;
+        }
+        if (state.length() < 2) {
+            return true;
+        }
+        for (final String fatalClass : AbstractJdbc23PooledConnection.fatalClasses) {
+            if (state.startsWith(fatalClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private void fireConnectionError(final SQLException e) {
+        if (!isFatalState(e.getSQLState())) {
+            return;
+        }
+        this.fireConnectionFatalError(e);
+    }
+    
+    static {
+        AbstractJdbc23PooledConnection.fatalClasses = new String[] { "08", "53", "57P01", "57P02", "57P03", "58", "60", "99", "F0", "XX" };
+    }
+    
+    private class ConnectionHandler implements InvocationHandler
+    {
+        private Connection con;
+        private Connection proxy;
+        private boolean automatic;
+        
+        public ConnectionHandler(final Connection con) {
+            this.automatic = false;
+            this.con = con;
+        }
+        
+        @Override
+        public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+            final String methodName = method.getName();
+            if (method.getDeclaringClass().getName().equals("java.lang.Object")) {
+                if (methodName.equals("toString")) {
+                    return "Pooled connection wrapping physical connection " + this.con;
+                }
+                if (methodName.equals("equals")) {
+                    return proxy == args[0];
+                }
+                if (methodName.equals("hashCode")) {
+                    return System.identityHashCode(proxy);
+                }
+                try {
+                    return method.invoke(this.con, args);
+                }
+                catch (InvocationTargetException e) {
+                    throw e.getTargetException();
+                }
+            }
+            if (methodName.equals("isClosed")) {
+                return this.con == null || this.con.isClosed();
+            }
+            if (methodName.equals("close")) {
+                if (this.con == null) {
+                    return null;
+                }
+                SQLException ex = null;
+                if (!this.con.isClosed()) {
+                    if (!AbstractJdbc23PooledConnection.this.isXA && !this.con.getAutoCommit()) {
+                        try {
+                            this.con.rollback();
+                        }
+                        catch (SQLException e2) {
+                            ex = e2;
+                        }
+                    }
+                    this.con.clearWarnings();
+                }
+                this.con = null;
+                this.proxy = null;
+                AbstractJdbc23PooledConnection.this.last = null;
+                AbstractJdbc23PooledConnection.this.fireConnectionClosed();
+                if (ex != null) {
+                    throw ex;
+                }
+                return null;
+            }
+            else {
+                if (this.con == null || this.con.isClosed()) {
+                    throw new PSQLException(this.automatic ? GT.tr("Connection has been closed automatically because a new connection was opened for the same PooledConnection or the PooledConnection has been closed.") : GT.tr("Connection has been closed."), PSQLState.CONNECTION_DOES_NOT_EXIST);
+                }
+                try {
+                    if (methodName.equals("createStatement")) {
+                        final Statement st = (Statement)method.invoke(this.con, args);
+                        return Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { Statement.class, PGStatement.class }, new StatementHandler(this, st));
+                    }
+                    if (methodName.equals("prepareCall")) {
+                        final Statement st = (Statement)method.invoke(this.con, args);
+                        return Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { CallableStatement.class, PGStatement.class }, new StatementHandler(this, st));
+                    }
+                    if (methodName.equals("prepareStatement")) {
+                        final Statement st = (Statement)method.invoke(this.con, args);
+                        return Proxy.newProxyInstance(this.getClass().getClassLoader(), new Class[] { PreparedStatement.class, PGStatement.class }, new StatementHandler(this, st));
+                    }
+                    return method.invoke(this.con, args);
+                }
+                catch (InvocationTargetException ite) {
+                    final Throwable te = ite.getTargetException();
+                    if (te instanceof SQLException) {
+                        AbstractJdbc23PooledConnection.this.fireConnectionError((SQLException)te);
+                    }
+                    throw te;
+                }
+            }
+        }
+        
+        Connection getProxy() {
+            return this.proxy;
+        }
+        
+        void setProxy(final Connection proxy) {
+            this.proxy = proxy;
+        }
+        
+        public void close() {
+            if (this.con != null) {
+                this.automatic = true;
+            }
+            this.con = null;
+            this.proxy = null;
+        }
+        
+        public boolean isClosed() {
+            return this.con == null;
+        }
+    }
+    
+    private class StatementHandler implements InvocationHandler
+    {
+        private ConnectionHandler con;
+        private Statement st;
+        
+        public StatementHandler(final ConnectionHandler con, final Statement st) {
+            this.con = con;
+            this.st = st;
+        }
+        
+        @Override
+        public Object invoke(final Object proxy, final Method method, final Object[] args) throws Throwable {
+            final String methodName = method.getName();
+            if (method.getDeclaringClass().getName().equals("java.lang.Object")) {
+                if (methodName.equals("toString")) {
+                    return "Pooled statement wrapping physical statement " + this.st;
+                }
+                if (methodName.equals("hashCode")) {
+                    return System.identityHashCode(proxy);
+                }
+                if (methodName.equals("equals")) {
+                    return proxy == args[0];
+                }
+                return method.invoke(this.st, args);
+            }
+            else {
+                if (methodName.equals("isClosed")) {
+                    return this.st == null || this.st.isClosed();
+                }
+                if (methodName.equals("close")) {
+                    if (this.st == null || this.st.isClosed()) {
+                        return null;
+                    }
+                    this.con = null;
+                    final Statement oldSt = this.st;
+                    this.st = null;
+                    oldSt.close();
+                    return null;
+                }
+                else {
+                    if (this.st == null || this.st.isClosed()) {
+                        throw new PSQLException(GT.tr("Statement has been closed."), PSQLState.OBJECT_NOT_IN_STATE);
+                    }
+                    if (methodName.equals("getConnection")) {
+                        return this.con.getProxy();
+                    }
+                    try {
+                        return method.invoke(this.st, args);
+                    }
+                    catch (InvocationTargetException ite) {
+                        final Throwable te = ite.getTargetException();
+                        if (te instanceof SQLException) {
+                            AbstractJdbc23PooledConnection.this.fireConnectionError((SQLException)te);
+                        }
+                        throw te;
+                    }
+                }
+            }
+        }
+    }
+}

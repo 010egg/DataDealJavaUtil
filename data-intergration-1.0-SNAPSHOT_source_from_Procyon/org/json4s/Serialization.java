@@ -1,0 +1,27 @@
+// 
+// Decompiled by Procyon v0.5.36
+// 
+
+package org.json4s;
+
+import scala.reflect.Manifest;
+import java.io.Writer;
+import scala.reflect.ScalaSignature;
+
+@ScalaSignature(bytes = "\u0006\u0001\u0005\u0005baB\u0001\u0003!\u0003\r\ta\u0002\u0002\u000e'\u0016\u0014\u0018.\u00197ju\u0006$\u0018n\u001c8\u000b\u0005\r!\u0011A\u00026t_:$4OC\u0001\u0006\u0003\ry'oZ\u0002\u0001'\t\u0001\u0001\u0002\u0005\u0002\n\u00195\t!BC\u0001\f\u0003\u0015\u00198-\u00197b\u0013\ti!B\u0001\u0004B]f\u0014VM\u001a\u0005\u0006\u001f\u0001!\t\u0001E\u0001\u0007I%t\u0017\u000e\u001e\u0013\u0015\u0003E\u0001\"!\u0003\n\n\u0005MQ!\u0001B+oSRDQ!\u0006\u0001\u0007\u0002Y\tQa\u001e:ji\u0016,\"a\u0006\u0016\u0015\u0005a1CCA\r!!\tQRD\u0004\u0002\n7%\u0011ADC\u0001\u0007!J,G-\u001a4\n\u0005yy\"AB*ue&twM\u0003\u0002\u001d\u0015!)\u0011\u0005\u0006a\u0002E\u00059am\u001c:nCR\u001c\bCA\u0012%\u001b\u0005\u0011\u0011BA\u0013\u0003\u0005\u001d1uN]7biNDQa\n\u000bA\u0002!\n\u0011!\u0019\t\u0003S)b\u0001\u0001B\u0003,)\t\u0007AFA\u0001B#\ti\u0003\u0002\u0005\u0002\n]%\u0011qF\u0003\u0002\b\u001d>$\b.\u001b8h\u0011\u0015)\u0002A\"\u00012+\r\u00114)\u000e\u000b\u0004g\u0005#EC\u0001\u001bA!\tIS\u0007B\u00037a\t\u0007qGA\u0001X#\ti\u0003\b\u0005\u0002:}5\t!H\u0003\u0002<y\u0005\u0011\u0011n\u001c\u0006\u0002{\u0005!!.\u0019<b\u0013\ty$H\u0001\u0004Xe&$XM\u001d\u0005\u0006CA\u0002\u001dA\t\u0005\u0006OA\u0002\rA\u0011\t\u0003S\r#Qa\u000b\u0019C\u00021BQ!\u0012\u0019A\u0002Q\n1a\\;u\u0011\u00159\u0005A\"\u0001I\u0003-9(/\u001b;f!J,G\u000f^=\u0016\u0005%sEC\u0001&M)\tI2\nC\u0003\"\r\u0002\u000f!\u0005C\u0003(\r\u0002\u0007Q\n\u0005\u0002*\u001d\u0012)1F\u0012b\u0001Y!)q\t\u0001D\u0001!V\u0019\u0011\u000b\u0017+\u0015\u0007I3\u0016\f\u0006\u0002T+B\u0011\u0011\u0006\u0016\u0003\u0006m=\u0013\ra\u000e\u0005\u0006C=\u0003\u001dA\t\u0005\u0006O=\u0003\ra\u0016\t\u0003Sa#QaK(C\u00021BQ!R(A\u0002MCQa\u0017\u0001\u0005\u0002q\u000bAA]3bIV\u0011Q\f\u0019\u000b\u0003=:$2aX3g!\tI\u0003\rB\u0003,5\n\u0007\u0011-\u0005\u0002.EB\u0011\u0011bY\u0005\u0003I*\u00111!\u00118z\u0011\u0015\t#\fq\u0001#\u0011\u00159'\fq\u0001i\u0003\tig\rE\u0002jY~k\u0011A\u001b\u0006\u0003W*\tqA]3gY\u0016\u001cG/\u0003\u0002nU\nAQ*\u00198jM\u0016\u001cH\u000fC\u0003p5\u0002\u0007\u0011$\u0001\u0003kg>t\u0007\"B.\u0001\r\u0003\tXC\u0001:v)\t\u0019\u0018\u0010F\u0002um^\u0004\"!K;\u0005\u000b-\u0002(\u0019A1\t\u000b\u0005\u0002\b9\u0001\u0012\t\u000b\u001d\u0004\b9\u0001=\u0011\u0007%dG\u000fC\u0003pa\u0002\u0007!\u0010\u0005\u0002$w&\u0011AP\u0001\u0002\n\u0015N|g.\u00138qkRDQ!\t\u0001\u0005\u0002y$2a`A\u000f%\u0011\t\t\u0001\u0003\u0012\u0007\u000b\u0005\rQ\u0010A@\u0003\u0019q\u0012XMZ5oK6,g\u000e\u001e \t\u0015\u0005\u001d\u0011\u0011\u0001b\u0001\n\u0003\tI!\u0001\u0006eCR,gi\u001c:nCR,\"!a\u0003\u0011\u0007\r\ni!C\u0002\u0002\u0010\t\u0011!\u0002R1uK\u001a{'/\\1u\u0011)\t\u0019\"!\u0001C\u0002\u0013\u0005\u0013QC\u0001\nif\u0004X\rS5oiN,\"!a\u0006\u0011\u0007\r\nI\"C\u0002\u0002\u001c\t\u0011\u0011\u0002V=qK\"Kg\u000e^:\t\u000f\u0005}Q\u00101\u0001\u0002\u0018\u0005)\u0001.\u001b8ug\u0002")
+public interface Serialization
+{
+     <A> String write(final A p0, final Formats p1);
+    
+     <A, W extends Writer> W write(final A p0, final W p1, final Formats p2);
+    
+     <A> String writePretty(final A p0, final Formats p1);
+    
+     <A, W extends Writer> W writePretty(final A p0, final W p1, final Formats p2);
+    
+     <A> A read(final String p0, final Formats p1, final Manifest<A> p2);
+    
+     <A> A read(final JsonInput p0, final Formats p1, final Manifest<A> p2);
+    
+    Formats formats(final TypeHints p0);
+}

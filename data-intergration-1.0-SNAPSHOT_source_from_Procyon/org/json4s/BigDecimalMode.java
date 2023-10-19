@@ -1,0 +1,18 @@
+// 
+// Decompiled by Procyon v0.5.36
+// 
+
+package org.json4s;
+
+import scala.math.BigDecimal;
+import scala.reflect.ScalaSignature;
+
+@ScalaSignature(bytes = "\u0006\u0001)3\u0001\"\u0001\u0002\u0011\u0002\u0007\u0005qa\u000f\u0002\u000f\u0005&<G)Z2j[\u0006dWj\u001c3f\u0015\t\u0019A!\u0001\u0004kg>tGg\u001d\u0006\u0002\u000b\u0005\u0019qN]4\u0004\u0001M\u0011\u0001\u0001\u0003\t\u0003\u00131i\u0011A\u0003\u0006\u0002\u0017\u0005)1oY1mC&\u0011QB\u0003\u0002\u0007\u0003:L(+\u001a4\t\u000b=\u0001A\u0011\u0001\t\u0002\r\u0011Jg.\u001b;%)\u0005\t\u0002CA\u0005\u0013\u0013\t\u0019\"B\u0001\u0003V]&$\b\"B\u000b\u0001\t\u00071\u0012!\u00043pk\ndWM\r6wC2,X\r\u0006\u0002\u0018?A\u0011\u0001\u0004\b\b\u00033ii\u0011AA\u0005\u00037\t\tqAS:p]\u0006\u001bF+\u0003\u0002\u001e=\t1!JV1mk\u0016T!a\u0007\u0002\t\u000b\u0001\"\u0002\u0019A\u0011\u0002\u0003a\u0004\"!\u0003\u0012\n\u0005\rR!A\u0002#pk\ndW\rC\u0003&\u0001\u0011\ra%\u0001\u0007gY>\fGO\r6wC2,X\r\u0006\u0002\u0018O!)\u0001\u0005\na\u0001QA\u0011\u0011\"K\u0005\u0003U)\u0011QA\u00127pCRDQ\u0001\f\u0001\u0005\u00045\n\u0011CY5hI\u0016\u001c\u0017.\\1me)4\u0018\r\\;f)\t9b\u0006C\u0003!W\u0001\u0007q\u0006\u0005\u00021q9\u0011\u0011G\u000e\b\u0003eUj\u0011a\r\u0006\u0003i\u0019\ta\u0001\u0010:p_Rt\u0014\"A\u0006\n\u0005]R\u0011a\u00029bG.\fw-Z\u0005\u0003si\u0012!BQ5h\t\u0016\u001c\u0017.\\1m\u0015\t9$BE\u0002=}}2A!\u0010\u0001\u0001w\taAH]3gS:,W.\u001a8u}A\u0011\u0011\u0004\u0001\t\u00033\u0001K!!\u0011\u0002\u0003\u0013%k\u0007\u000f\\5dSR\u001cx!B\"\u0003\u0011\u0003!\u0015A\u0004\"jO\u0012+7-[7bY6{G-\u001a\t\u00033\u00153Q!\u0001\u0002\t\u0002\u0019\u001bB!\u0012\u0005@}!)\u0001*\u0012C\u0001\u0013\u00061A(\u001b8jiz\"\u0012\u0001\u0012")
+public interface BigDecimalMode
+{
+    JsonAST.JValue double2jvalue(final double p0);
+    
+    JsonAST.JValue float2jvalue(final float p0);
+    
+    JsonAST.JValue bigdecimal2jvalue(final BigDecimal p0);
+}

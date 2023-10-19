@@ -1,0 +1,14 @@
+// 
+// Decompiled by Procyon v0.5.36
+// 
+
+package org.json4s.scalap;
+
+import scala.Function0;
+import scala.reflect.ScalaSignature;
+
+@ScalaSignature(bytes = "\u0006\u0001\u00192q!\u0001\u0002\u0011\u0002G\u0005\u0011B\u0001\u0006NK6|\u0017n]1cY\u0016T!a\u0001\u0003\u0002\rM\u001c\u0017\r\\1q\u0015\t)a!\u0001\u0004kg>tGg\u001d\u0006\u0002\u000f\u0005\u0019qN]4\u0004\u0001M\u0011\u0001A\u0003\t\u0003\u00179i\u0011\u0001\u0004\u0006\u0002\u001b\u0005)1oY1mC&\u0011q\u0002\u0004\u0002\u0007\u0003:L(+\u001a4\t\u000bE\u0001a\u0011\u0001\n\u0002\t5,Wn\\\u000b\u0003'Y!2\u0001F\u0010\"!\t)b\u0003\u0004\u0001\u0005\u000b]\u0001\"\u0019\u0001\r\u0003\u0003\u0005\u000b\"!\u0007\u000f\u0011\u0005-Q\u0012BA\u000e\r\u0005\u001dqu\u000e\u001e5j]\u001e\u0004\"aC\u000f\n\u0005ya!aA!os\")\u0001\u0005\u0005a\u0001\u0015\u0005\u00191.Z=\t\r\t\u0002B\u00111\u0001$\u0003\u0005\t\u0007cA\u0006%)%\u0011Q\u0005\u0004\u0002\ty\tLh.Y7f}\u0001")
+public interface Memoisable
+{
+     <A> A memo(final Object p0, final Function0<A> p1);
+}
